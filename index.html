@@ -236,7 +236,20 @@
     background: linear-gradient(135deg, #cc3333, #991111);
     color: #fff;
   }
-  .btn-win:hover, .btn-lose:hover {
+  .btn-skip {
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.15s;
+    background: linear-gradient(135deg, #555555, #333333);
+    color: #fff;
+  }
+  .btn-win:hover, .btn-lose:hover, .btn-skip:hover {
     transform: translateY(-2px);
   }
 
@@ -366,6 +379,7 @@
     <div class="modal-buttons">
       <button class="btn-win" onclick="recordResult('win')">Won</button>
       <button class="btn-lose" onclick="recordResult('lose')">Lost</button>
+      <button class="btn-skip" onclick="recordResult('skip')">Skip</button>
     </div>
   </div>
 </div>
@@ -681,6 +695,13 @@ function closeModal() {
 
 function recordResult(result) {
   if (!currentPick) return;
+
+  if (result === "skip") {
+    // Someone else took the character — just dismiss and re-spin
+    currentPick = null;
+    closeModal();
+    return;
+  }
 
   if (result === "lose") {
     active = active.filter(c => c.name !== currentPick.name);
